@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify
 import joblib
+import os
+
+# Construct the relative path to the model file
+current_directory = os.path.dirname(__file__)
+model_path = os.path.join(current_directory, 'voting_classifier_pipeline2.pkl')
 
 # Load the trained model
-model_path = "C:\\Users\\Ian\\Documents\\fraiton\\Phase4Project\\NLP-tweet-sentiment-project\\voting_classifier_pipeline2.pkl"
 model = joblib.load(model_path)
 
 app = Flask(__name__)
@@ -19,11 +23,8 @@ def predict():
     # Extract input data
     input_data = data['input']  # Assuming the input data is sent as JSON
     
-    # Convert input data to the appropriate format
-    # Example: input_data = [input_data] if your model expects a list
-    
     # Make prediction
-    prediction = model.predict(input_data)
+    prediction = model.predict([input_data])
     
     # Return the result as JSON
     return jsonify({'prediction': prediction.tolist()})
